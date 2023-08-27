@@ -15,7 +15,7 @@ int main(){
   int ny {16};
   int nsteps {1000};
 
-  double J {0.1};
+  double J {1};
   double temp {0.0};
   
   vector<vector<int>> spin_grid = initialise_grid(nx, ny);
@@ -51,11 +51,8 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
 	double energy = -J * grid_tmp[i][j] * (grid_tmp[i-1][j] + grid_tmp[i+1][j] + grid_tmp[i][j-1] + grid_tmp[i][j+1]);
 	double flip_energy_change = -2. * energy;
 
-	if(flip_energy_change < 0)
+	if((flip_energy_change < 0) || (distribution(gen) < exp(-flip_energy_change/temp)))
 	  grid[i][j] *= -1;
-	else
-	  if(distribution(gen) < exp(-flip_energy_change/temp))
-	    grid[i][j] *= -1;
       }
     
     istep++;
