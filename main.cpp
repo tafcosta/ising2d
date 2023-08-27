@@ -96,7 +96,7 @@ void saveGridToFile(const vector<vector<int>>& grid, int step) {
         return;
     }
 
-    plotFile << "plot " << filename << " matrix w image";
+    plotFile << "plot " << filename << " matrix w image\n";
     for (const auto& row : grid) {
         for (int value : row) {
             outputFile << value << " ";
