@@ -2,12 +2,17 @@
 #include <vector>
 #include <random>
 #include <cmath>
+#include <fstream>
 
 using namespace std;
 
 vector<vector<int>> initialise_grid(int nx, int ny);
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp);
 void print_grid_values(vector<vector<int>> grid, int nx, int ny);
+void saveGridToFile(const vector<vector<int>>& grid, int step);
+
+string plot_filename = "plot.txt";
+ofstream plotFile(plot_filename);
 
 int main(){
   
@@ -19,9 +24,8 @@ int main(){
   double temp {0.0};
   
   vector<vector<int>> spin_grid = initialise_grid(nx, ny);
-
+  
   do_timestepping(nsteps, spin_grid, nx, ny, J, temp);
-  print_grid_values(spin_grid, nx, ny);  
 }
 
 void print_grid_values(vector<vector<int>> grid, int nx, int ny)
@@ -54,7 +58,8 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
 	if((flip_energy_change < 0) || (distribution(gen) < exp(-flip_energy_change/temp)))
 	  grid[i][j] *= -1;
       }
-    
+
+    saveGridToFile(grid, istep);
     istep++;
   }
 }
@@ -80,4 +85,24 @@ vector<vector<int>> initialise_grid(int nx, int ny)
       }
   
   return grid;
+}
+
+void saveGridToFile(const vector<vector<int>>& grid, int step) {
+    string filename = "grid_step_" + to_string(step) + ".txt"; 
+    ofstream outputFile(filename);
+
+    if (!outputFile) {
+        cerr << "Error: Could not open file for writing." << endl;
+        return;
+    }
+
+    plotFile << "plot " << filename << " matrix w image";
+    for (const auto& row : grid) {
+        for (int value : row) {
+            outputFile << value << " ";
+        }
+        outputFile << endl;
+    }
+
+    outputFile.close();
 }
