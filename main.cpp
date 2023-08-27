@@ -18,7 +18,7 @@ int main(){
   
   int nx {64};
   int ny {64};
-  int nsteps {1000};
+  int nsteps {100000};
 
   double J {0.1};
   double temp {0.6};
@@ -40,7 +40,6 @@ void print_grid_values(vector<vector<int>> grid, int nx, int ny)
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp)
 {
   int istep {0};
-  vector<vector<int>> grid_tmp(ny, vector<int>(nx, 0));
   
   random_device rd;
   mt19937 gen(rd());
@@ -49,21 +48,17 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
   
   while(istep < nsteps){
 
-    for(int i = 0; i < ny; i++)
-      for(int j = 0; j < nx; j++)
-	grid_tmp[i][j] = grid[i][j];
-    
-    for(int i = 1; i < (ny - 1); i++)
-      for(int j = 1; j < (nx - 1); j++){
-	
-	double energy = -J * grid_tmp[i][j] * (grid_tmp[i-1][j] + grid_tmp[i+1][j] + grid_tmp[i][j-1] + grid_tmp[i][j+1]);
-	double flip_energy_change = -2. * energy;
+    int i = 1 + distribution(gen) * (ny - 2);
+    int	j = 1 + distribution(gen) * (nx - 2);
 
-	if((flip_energy_change < 0) || ((flip_energy_change > 0) && (distribution(gen) < exp(-flip_energy_change/temp))))
-	  grid[i][j] *= -1;
-      }
+    double energy = -J * grid[i][j] * (grid[i-1][j] + grid[i+1][j] + grid[i][j-1] + grid[i][j+1]);
+    double flip_energy_change = -2 * energy;
 
-    saveGridToFile(grid, istep);
+    if((flip_energy_change < 0) || ((flip_energy_change > 0) && (distribution(gen) < exp(-flip_energy_change/temp))))
+      grid[i][j] *= -1;
+
+    if(istep % 1000 == 0)
+      saveGridToFile(grid, istep);
     istep++;
   }
 }
