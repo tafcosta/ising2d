@@ -10,22 +10,22 @@ vector<vector<int>> initialise_grid(int nx, int ny);
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp);
 void print_grid_values(vector<vector<int>> grid, int nx, int ny);
 void saveGridToFile(const vector<vector<int>>& grid, int step);
+int grid_bc(int i, int j);
 
 string plot_filename = "plot.txt";
 ofstream plotFile(plot_filename);
 
+int nx {128};
+int ny {128};
+vector<vector<int>> grid = initialise_grid(nx, ny);
+
 int main(){
-  
-  int nx {64};
-  int ny {64};
-  int nsteps {100000};
+  int nsteps {1000000};
 
   double J {0.1};
-  double temp {0.6};
-  
-  vector<vector<int>> spin_grid = initialise_grid(nx, ny);
-  
-  do_timestepping(nsteps, spin_grid, nx, ny, J, temp);
+  double temp {0.3};
+    
+  do_timestepping(nsteps, grid, nx, ny, J, temp);
 }
 
 void print_grid_values(vector<vector<int>> grid, int nx, int ny)
@@ -48,10 +48,10 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
   
   while(istep < nsteps){
 
-    int i = 1 + distribution(gen) * (ny - 2);
-    int	j = 1 + distribution(gen) * (nx - 2);
+    int i = distribution(gen) * ny;
+    int	j = distribution(gen) * nx;
 
-    double energy = -J * grid[i][j] * (grid[i-1][j] + grid[i+1][j] + grid[i][j-1] + grid[i][j+1]);
+    double energy = -J * grid_bc(i,j) * (grid_bc(i-1,j) + grid_bc(i+1,j) + grid_bc(i,j-1) + grid_bc(i,j+1));
     double flip_energy_change = -2 * energy;
 
     if((flip_energy_change < 0) || ((flip_energy_change > 0) && (distribution(gen) < exp(-flip_energy_change/temp))))
@@ -61,6 +61,21 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
       saveGridToFile(grid, istep);
     istep++;
   }
+}
+
+int grid_bc(int i, int j)
+{  
+  if(i < 0)
+    i += ny;
+  else if(i >= ny)
+    i -= ny;
+
+  if(j < 0)
+    j += nx;
+  else if(j >= nx)
+    j -= nx;
+  
+  return grid[i][j];
 }
 
 vector<vector<int>> initialise_grid(int nx, int ny)
