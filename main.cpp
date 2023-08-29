@@ -15,26 +15,24 @@ int grid_bc(int i, int j);
 string plot_filename = "plot.txt";
 ofstream plotFile(plot_filename);
 
-int nx {128};
-int ny {128};
+int nx {256};
+int ny {256};
 vector<vector<int>> grid = initialise_grid(nx, ny);
 
 int main(){
   int nsteps {1000000};
 
   double J {0.1};
-  double temp {0.3};
+  double temp {0.2};
     
   do_timestepping(nsteps, grid, nx, ny, J, temp);
 }
 
 void print_grid_values(vector<vector<int>> grid, int nx, int ny)
 {
-    for(int i = 0; i < ny; i++)
-      for(int j = 0; j < nx; j++)
+    for(int i = 0; i < nx; i++)
+      for(int j = 0; j < ny; j++)
 	cout << grid[i][j] << "\n";
-
-    cout << " \n";
 }
 
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp)
@@ -87,8 +85,8 @@ vector<vector<int>> initialise_grid(int nx, int ny)
   
   uniform_real_distribution<double> distribution(0., 1.);
   
-  for(int i = 0; i < ny; i++)
-    for(int j = 0; j < nx; j++)
+  for(int i = 0; i < nx; i++)
+    for(int j = 0; j < ny; j++)
       {
       double random_number = distribution(gen);
       
