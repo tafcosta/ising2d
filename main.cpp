@@ -4,7 +4,9 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <filesystem>  
 
+namespace fs = std::filesystem;
 using namespace std;
 
 string plot_filename = "plot.txt";
@@ -40,7 +42,7 @@ public:
       if(flip_delta_energy < 0 || (flip_delta_energy > 0 && distribution(gen) < exp(-flip_delta_energy/temp)))
 	grid_[i][j] *= -1;
 
-      if(istep % 10000 == 0)
+      if(istep % 100000 == 0)
 	saveGridToFile(grid_, istep);
     }
   }
@@ -67,26 +69,37 @@ private:
   double evaluate_delta_energy(double J, int i, int j){
     return -2 * (-J * grid_bc(i,j) * (grid_bc(i-1,j) + grid_bc(i+1,j) + grid_bc(i,j-1) + grid_bc(i,j+1)));
   }
-  
-  void saveGridToFile(const vector<vector<int>>& grid, int step) {
-    string filename = "grid_step_" + to_string(step) + ".txt";
+
+  void saveGridToFile(const std::vector<std::vector<int>>& grid, int step) {
+    string outputFolder = "output/";
+
+    if (!fs::exists(outputFolder)) {
+      if (!fs::create_directory(outputFolder)) {
+	std::cerr << "Error: Failed to create the output folder." << std::endl;
+	return;
+      }
+    }
+
+    string filename = outputFolder + "grid_step_" + std::to_string(step) + ".txt";
     ofstream outputFile(filename);
     
     if (!outputFile) {
-      cerr << "Error: Could not open file for writing." << endl;
+      std::cerr << "Error: Could not open file for writing." << std::endl;
       return;
     }
-    
-    plotFile << "plot \"" << filename << "\" matrix w image\n";
+
     for (const auto& row : grid) {
       for (int value : row) {
 	outputFile << value << " ";
       }
-      outputFile << endl;
+      outputFile << std::endl;
     }
     
     outputFile.close();
+    
+    plotFile << "plot \"" << filename << "\" matrix w image\n";
   }
+  
 };
 
 int main(int argc, char* argv[])
