@@ -8,7 +8,6 @@ using namespace std;
 
 vector<vector<int>> initialise_grid(int nx, int ny);
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp);
-void print_grid_values(vector<vector<int>> grid, int nx, int ny);
 void saveGridToFile(const vector<vector<int>>& grid, int step);
 int grid_bc(int i, int j);
 
@@ -28,13 +27,6 @@ int main(){
   do_timestepping(nsteps, grid, nx, ny, J, temp);
 }
 
-void print_grid_values(vector<vector<int>> grid, int nx, int ny)
-{
-    for(int i = 0; i < nx; i++)
-      for(int j = 0; j < ny; j++)
-	cout << grid[i][j] << "\n";
-}
-
 void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, double J, double temp)
 {
   int istep {0};
@@ -46,8 +38,8 @@ void do_timestepping(int nsteps, vector<vector<int>>& grid, int nx, int ny, doub
   
   while(istep < nsteps){
 
-    int i = distribution(gen) * ny;
-    int	j = distribution(gen) * nx;
+    int i = distribution(gen) * nx;
+    int	j = distribution(gen) * ny;
 
     double energy = -J * grid_bc(i,j) * (grid_bc(i-1,j) + grid_bc(i+1,j) + grid_bc(i,j-1) + grid_bc(i,j+1));
     double flip_energy_change = -2 * energy;
