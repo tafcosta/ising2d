@@ -12,10 +12,10 @@ using namespace std;
 string plot_filename = "plot.txt";
 ofstream plotFile(plot_filename);
 
-class Grid2D
+class Grid2d
 {
 public:
-  Grid(int Nside) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
+  Grid2d(int Nside) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
 
     random_device rd;
     mt19937 gen(rd());
@@ -115,6 +115,6 @@ int main(int argc, char* argv[])
   double temp = stod(argv[3]);
   int nsteps = stod(argv[4]);
 
-  Grid2D spins(Nside);
+  Grid2d spins(Nside);
   spins.do_timestepping(nsteps, J, temp);
 }
