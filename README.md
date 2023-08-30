@@ -3,9 +3,9 @@ A C++ implementation of the 2D Ising model.
 
 ## Input parameters:
 Ngrid: number of grid cells per side,  
-state: specifies how the spin grid is initialised, and admits values 1 (if all spins are "up"), -1 (if all spins point "down"), 0 (if spins are initialised randomly).
-J: interaction energy (assuming units kB = 1),  
-temp: temperature (assuming units kB = 1),  
+state: specifies how the spin grid is initialised, and admits values 1 (if all spins are "up"), -1 (if all spins point "down"), 0 (if spins are initialised randomly),  
+J: interaction temperature,  
+temp: temperature,  
 Nsteps: number of time-steps.  
 
 To call the program, do  
