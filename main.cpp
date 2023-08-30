@@ -31,11 +31,12 @@ public:
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> distribution(0., 1.);
+    int i, j;
     
     for(int istep=0; istep!=nsteps; istep++){
       
-      int i = static_cast<int>(distribution(gen) * Ncell);
-      int j = static_cast<int>(distribution(gen) * Ncell);
+      i = static_cast<int>(distribution(gen) * Ncell);
+      j = static_cast<int>(distribution(gen) * Ncell);
 
       double flip_delta_energy = evaluate_delta_energy(J,i,j);
       
