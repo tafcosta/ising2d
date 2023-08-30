@@ -16,7 +16,15 @@ ofstream plotFile(plot_filename);
 
 int nx {256};
 int ny {256};
-vector<vector<int>> grid = initialise_grid(nx, ny);
+
+class Grid
+{
+public:
+  Grid(int Nside) : Ncell {Nside}, spin(Nside, vector<int>(Nside, 0))}{}  
+private:
+  vector<vector<int>> spin;
+  int Ncell;
+}
 
 int main(){
   int nsteps {1000000};
