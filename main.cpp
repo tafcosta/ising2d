@@ -42,7 +42,7 @@ public:
       if(flip_delta_energy < 0 || (flip_delta_energy > 0 && distribution(gen) < exp(-flip_delta_energy/temp)))
 	grid_[i][j] *= -1;
 
-      if(istep % 100000 == 0)
+      if(istep % 1000000 == 0)
 	saveGridToFile(grid_, istep);
     }
   }
