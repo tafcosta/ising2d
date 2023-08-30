@@ -3,6 +3,7 @@
 #include <random>
 #include <cmath>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ public:
       if(flip_delta_energy < 0 || (flip_delta_energy > 0 && distribution(gen) < exp(-flip_delta_energy/temp)))
 	grid_[i][j] *= -1;
 
-      if(istep % 1000 == 0)
+      if(istep % 10000 == 0)
 	saveGridToFile(grid_, istep);
     }
   }
@@ -88,11 +89,18 @@ private:
   }
 };
 
-int main(){
-  int Nside = 256; 
-  int nsteps {1000000};
-  double J {0.1};
-  double temp {0.1};
+int main(int argc, char* argv[])
+{
+  if (argc != 5)
+    {
+      cerr << "Usage: " << argv[0] << " Nside J temp Nsteps" << endl;
+      return 1;
+    }
+  
+  int Nside = stoi(argv[1]);
+  double J = stod(argv[2]);
+  double temp = stod(argv[3]);
+  int nsteps = stod(argv[4]);
 
   Grid spins(Nside);
   spins.do_timestepping(nsteps, J, temp);
