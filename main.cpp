@@ -31,7 +31,8 @@ public:
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> distribution(0., 1.);
-        
+
+    cout << "Starting the computation..." << flush;
     for(int istep=0; istep!=nsteps; istep++){
       
       int i = static_cast<int>(distribution(gen) * Ncell);
@@ -44,7 +45,18 @@ public:
 
       if(istep % 1000000 == 0)
 	saveGridToFile(grid_, istep);
+      
     }
+  }
+
+  double compute_magnetisation()
+  {
+    double magnetisation = 0;
+    for (int i = 0; i < Ncell; i++)
+      for (int j = 0; j < Ncell; j++)
+          magnetisation += grid_[i][j];
+
+    return magnetisation / (Ncell * Ncell);
   }
 
 private:
