@@ -15,15 +15,30 @@ ofstream plotFile(plot_filename);
 class Grid2d
 {
 public:
-  Grid2d(int Nside) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
+  Grid2d(int Nside, char state) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
 
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> distribution(0, 1);
     
     for (int i = 0; i < Nside; i++)
-	for (int j = 0; j < Nside; j++)
+      for (int j = 0; j < Nside; j++){
+	
+	switch(state){
+	  
+	case  1:
+	  grid_[i][j] = 1;
+	  break;
+	  
+	case -1:
+	  grid_[i][j] = -1;
+	  break;
+	  
+	default:
 	  grid_[i][j] = distribution(gen) > 0.5 ? 1 : -1;
+	}
+	
+      }
   }
   
   void do_timestepping(int nsteps, double J, double temp)
@@ -32,7 +47,7 @@ public:
     mt19937 gen(rd());
     uniform_real_distribution<double> distribution(0., 1.);
 
-    cout << "Starting the computation..." << flush;
+    cout << "Starting the computation...\n" << flush;
     for(int istep=0; istep!=nsteps; istep++){
       
       int i = static_cast<int>(distribution(gen) * Ncell);
@@ -116,17 +131,20 @@ private:
 
 int main(int argc, char* argv[])
 {
-  if (argc != 5)
+  if (argc != 6)
     {
-      cerr << "Usage: " << argv[0] << " Nside J temp Nsteps" << endl;
+      cerr << "Usage: " << argv[0] << " Nside state J temp Nsteps" << endl;
       return 1;
     }
   
   int Nside = stoi(argv[1]);
-  double J = stod(argv[2]);
-  double temp = stod(argv[3]);
-  int nsteps = stod(argv[4]);
+  int state = stoi(argv[2]);
+  double J = stod(argv[3]);
+  double temp = stod(argv[4]);
+  int nsteps = stod(argv[5]);
 
-  Grid2d spins(Nside);
+  Grid2d spins(Nside, state);
   spins.do_timestepping(nsteps, J, temp);
+
+  cout << "Magnetisation = " << spins.compute_magnetisation() << "\n";
 }
