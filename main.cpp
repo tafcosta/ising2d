@@ -15,7 +15,7 @@ ofstream plotFile(plot_filename);
 class Grid2d
 {
 public:
-  Grid2d(int Nside, char state) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
+  Grid2d(int Nside, int state) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
 
     random_device rd;
     mt19937 gen(rd());
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
   int state = stoi(argv[2]);
   double J = stod(argv[3]);
   double temp = stod(argv[4]);
-  int nsteps = stod(argv[5]);
+  int nsteps = stoi(argv[5]);
 
   Grid2d spins(Nside, state);
   spins.do_timestepping(nsteps, J, temp);
