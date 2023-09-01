@@ -12,8 +12,7 @@ using namespace std;
 string plot_filename = "plot.txt";
 ofstream plotFile(plot_filename);
 
-class Grid2d
-{
+class Grid2d{
 public:
   Grid2d(int Nside, int state) : Ncell {Nside}, grid_(Nside, vector<int>(Nside)){
 
@@ -36,31 +35,29 @@ public:
 	  
 	default:
 	  grid_[i][j] = distribution(gen) > 0.5 ? 1 : -1;
-	}
-	
+	}	
       }
   }
   
-  void do_timestepping(int nsteps, double J, double temp)
+  void do_timestepping(long int nsteps, double J, double temp)
   {     
+    cout << "Starting the computation...\n" << flush;
+
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> distribution(0., 1.);
+    
+    for(long int istep=0; istep!=nsteps; istep++){
 
-    cout << "Starting the computation...\n" << flush;
-    for(int istep=0; istep!=nsteps; istep++){
-      
-      int i = static_cast<int>(distribution(gen) * Ncell);
-      int j = static_cast<int>(distribution(gen) * Ncell);
-
-      double flip_delta_energy = evaluate_delta_energy(J,i,j);
+      int i, j;
+      flip_one_spin(i, j);      
+      double flip_delta_energy = evaluate_delta_energy(J, i, j);
       
       if(flip_delta_energy < 0 || (flip_delta_energy > 0 && distribution(gen) < exp(-flip_delta_energy/temp)))
 	grid_[i][j] *= -1;
 
-      if(istep % 1000000 == 0)
+      if(istep % 10000 == 0)
 	saveGridToFile(grid_, istep);
-      
     }
   }
 
@@ -93,6 +90,15 @@ private:
     return grid_[i][j];
   }
 
+  void flip_one_spin(int& i, int& j){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> distribution(0., 1.);
+    
+    i = static_cast<int>(distribution(gen) * Ncell);
+    j = static_cast<int>(distribution(gen) * Ncell);
+  }
+  
   double evaluate_delta_energy(double J, int i, int j){
     return -2 * (-J * grid_bc(i,j) * (grid_bc(i-1,j) + grid_bc(i+1,j) + grid_bc(i,j-1) + grid_bc(i,j+1)));
   }
@@ -141,7 +147,7 @@ int main(int argc, char* argv[])
   int state = stoi(argv[2]);
   double J = stod(argv[3]);
   double temp = stod(argv[4]);
-  int nsteps = stoi(argv[5]);
+  long int nsteps = stol(argv[5]);
 
   Grid2d spins(Nside, state);
   spins.do_timestepping(nsteps, J, temp);

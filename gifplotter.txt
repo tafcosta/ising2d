@@ -2,7 +2,7 @@
 set terminal gif animate delay 3
 
 # Set the output file name
-set output 'animation.gif'
+set output 'animation_zoom.gif'
 
 # Set plot properties (you may customize these)
 set title "Ising2d"
@@ -10,11 +10,14 @@ set xlabel "X"
 set ylabel "Y"
 
 # Define custom color palette for the colorbar
-set palette defined (-1 "#FFA500", 0 "#FFFFFF", 1 "#000080")  # Darker blue
+set palette defined (-1 "#FFA500", 0 "#FFFFFF", 1 "#000080")
 
 # Set the aspect ratio to 1 (square)
 set size ratio -1
 set autoscale fix
+
+#set xrange [256:512]
+#set yrange [256:512]
 
 # Hide the colorbox
 unset colorbox
