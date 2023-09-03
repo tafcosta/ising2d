@@ -11,6 +11,7 @@ A C++ implementation of the 2D Ising model.
 
 To call the program, do  
 ./ising2d \<Ngrid\>  \<state\> \<J\> \<temp\> \<Nsteps\> \<foutput\>
+
 Example call: ./ising2d 256 0 1 1.22 1000000 1000
  
 
