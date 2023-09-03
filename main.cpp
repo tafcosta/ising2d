@@ -136,21 +136,21 @@ private:
     return -2 * (-J * grid_bc(i,j) * (grid_bc(i-1,j) + grid_bc(i+1,j) + grid_bc(i,j-1) + grid_bc(i,j+1)));
   }
 
-  void saveGridToFile(const std::vector<std::vector<int>>& grid, int step) {
+  void saveGridToFile(const vector<vector<int>>& grid, int step) {
     string outputFolder = "output/";
 
     if (!fs::exists(outputFolder)) {
       if (!fs::create_directory(outputFolder)) {
-	std::cerr << "Error: Failed to create the output folder." << std::endl;
+	cerr << "Error: Failed to create the output folder." << endl;
 	return;
       }
     }
 
-    string filename = outputFolder + "grid_step_" + std::to_string(step) + ".txt";
+    string filename = outputFolder + "grid_step_" + to_string(step) + ".txt";
     ofstream outputFile(filename);
     
     if (!outputFile) {
-      std::cerr << "Error: Could not open file for writing." << std::endl;
+      cerr << "Error: Could not open file for writing." << endl;
       return;
     }
 
@@ -158,7 +158,7 @@ private:
       for (int value : row) {
 	outputFile << value << " ";
       }
-      outputFile << std::endl;
+      outputFile << endl;
     }
     
     outputFile.close();
