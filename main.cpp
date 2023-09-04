@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 {
   if (argc != 7)
     {
-      cerr << "Usage: " << argv[0] << " Nside state J temp Nsteps" << endl;
+      cerr << "Usage: " << argv[0] << " Nside state J temp Nsteps foutput" << endl;
       return 1;
     }
   
