@@ -1,7 +1,9 @@
 # ising2d
 A C++ implementation of the 2D Ising model. Each spin i is associated to an energy  
-$$ E_i \, = \, - J \Sum_j{\sigma_i \sigma_j} $$  
-where J is the interaction energy scale and $$ \sigma_i \, = \, \pm 1$$ depending on whether a spin points "up" or "down". Thus, misaligned spins try to align, settling into a lower energy state.
+
+$$ E_i = - J \sum_j{\sigma_i \sigma_j} $$  
+
+where J is the interaction energy scale and $` \sigma_i \, = \, \pm 1`$ depending on whether a spin points "up" or "down". Thus, misaligned spins try to align, settling into a lower energy state. The tendency for spins to align is counterbalanced by heat. Thermal motions can also lead to spin flips with a probability set by the Boltzmann factor $` \propto e^{-(E_{\rm flip} - E_i)/(k_{\rm B} T)} `$.
 
 ## Input parameters:
 + Ngrid: number of grid cells per side,  
