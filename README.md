@@ -9,11 +9,17 @@ A C++ implementation of the 2D Ising model.
 + Nsteps: number of time-steps,  
 + foutput: number of time-steps in between outputs.
 
-To call the program, do  
+To compile on a MAC, type
+clang++ -std=c++2a -o ising2d main.cpp
+
+To call the program, type
 ./ising2d \<Ngrid\>  \<state\> \<J\> \<temp\> \<Nsteps\> \<foutput\>
 
-Example call: ./ising2d 256 0 1 1.22 1000000 1000
+Example call: ./ising2d 256 0 1 1.23 1000000 1000
  
 
 ## Critical point:
+
+A phase transition occurs at a temperature of T = 1.23, when the system spontaenously magnetises. At this critical point, spin fluctuations become correlated out to arbitrarily large-scales and the system becomes scale-invariant. 
+
 ![](https://github.com/tafcosta/ising2d/blob/master/animation.gif)
